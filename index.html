@@ -1,0 +1,98 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            body {
+                font-size: 30px;
+            }
+        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script>
+            const PEDRA = "pedra";
+            const PAPEL = "papel";
+            const TESOURA = "tesoura";
+
+            const VENCEDOR_JOGADOR = "jogador";
+            const VENCEDOR_COMPUTADOR = "computador";
+            const EMPATE = "empate";
+
+            $(function() {
+                $("#botao-enviar").click(
+                    function() {
+                        if (validarFormulario() == false) {
+                            alert("Você deve selecionar pedra, papel ou tesoura.")
+                            return false;
+                        }
+
+                        const escolhaComputador = obterEscolhaComputador();
+                
+                        $("#escolha-comuputador").text("A escolha do computador foi: " + escolhaComputador);
+
+                        const escolhaJogador = $(".escolha-jogador:checked").val();
+                        const vencedor = obterVencedor(escolhaComputador, escolhaJogador);
+                        $("#resultado").text("O vencedor foi o " + vencedor);
+                        
+                        if (vencedor == VENCEDOR_JOGADOR) {
+                            $("#pontuacao-voce").text(parseInt($("#pontuacao-voce").text()) + 1);
+                        } else if (vencedor == VENCEDOR_COMPUTADOR) {
+                            $("#pontuacao-computador").text(parseInt($("#pontuacao-computador").text()) + 1);
+                        }
+                    }
+                )
+            });
+
+            function obterVencedor(escolhaComputador, escolhaJogador) {
+                console.log(escolhaComputador)
+                console.log(escolhaJogador)
+                if (escolhaComputador === escolhaJogador) {
+                    return EMPATE;
+                } else {
+                    if (escolhaComputador == PEDRA && escolhaJogador == PAPEL) {
+                        return VENCEDOR_JOGADOR;
+                    } else if (escolhaComputador == PAPEL && escolhaJogador == TESOURA) {
+                        return VENCEDOR_JOGADOR;
+                    } else if (escolhaComputador == TESOURA && escolhaJogador == PEDRA) {
+                        return VENCEDOR_JOGADOR;
+                    }
+                }
+                
+                return VENCEDOR_COMPUTADOR;
+            }
+
+            function validarFormulario() {
+                return ! ($(".escolha-jogador").val() != "pedra" && $(".escolha-jogador").val() != "papel" && $(".escolha-jogador").val() != "tesoura"); 
+            }
+
+            function obterEscolhaComputador() {
+                const numeroRandomico = Math.random() * 10;
+
+                if (numeroRandomico > 6.66) {
+                    return PEDRA;
+                } else if (numeroRandomico < 3.33) {
+                    return PAPEL;
+                }
+
+                return TESOURA;
+            }
+        </script>
+    </head>
+    <body>
+        Placar: <br />
+        Você: <span id="pontuacao-voce" />0</span><br />
+        Computador: <span id="pontuacao-computador" />0</span>
+        
+        <hr />
+
+        <div>Jankenpo!</div>
+        <div>
+            <input type="radio" name="escolha-jogador" id="pedra"   class="escolha-jogador" value="pedra" checked="checked" />Pedra
+            <input type="radio" name="escolha-jogador" id="papel"   class="escolha-jogador" value="papel" />Papel
+            <input type="radio" name="escolha-jogador" id="tesoura" class="escolha-jogador" value="tesoura" />Tesoura
+            <input type="button" name="botao-enviar" value="Enviar" id="botao-enviar" />
+        </div>
+
+        <hr />
+        <div id="escolha-comuputador"></div>
+        <div id="resultado"></div>
+    </body>
+</html>
